@@ -485,4 +485,4 @@ finally:
     cv2.destroyAllWindows()
     print("Camera closed safely.")
   
-Added Data matrix scanner code
+#Added Data matrix scanner code
