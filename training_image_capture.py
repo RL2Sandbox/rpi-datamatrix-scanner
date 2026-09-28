@@ -1,12 +1,12 @@
-from picamera2 import Picamera2
+from picamera2 import Picamera2, Preview
 from datetime import datetime
 import os
+import time
 
 # Folder paths
 GOOD_FOLDER = "Training images/Good box"
-DAMAGED_FOLDER = "Training Images/Damaged box"
+DAMAGED_FOLDER = "Training images/Damaged box"
 
-# Create folders if they don't exist
 os.makedirs(GOOD_FOLDER, exist_ok=True)
 os.makedirs(DAMAGED_FOLDER, exist_ok=True)
 
@@ -18,7 +18,14 @@ config = picam2.create_still_configuration(
 )
 
 picam2.configure(config)
+
+# LIVE PREVIEW WINDOW
+picam2.start_preview(Preview.QTGL)
+
 picam2.start()
+
+# Let camera settle
+time.sleep(2)
 
 print("\n=== CARTON DATASET CAPTURE ===")
 print("g = Good Box")
@@ -53,4 +60,6 @@ while True:
     picam2.capture_file(filename)
     print(f"Saved: {filename}")
 
+picam2.stop_preview()
 print("Done!")
+`
