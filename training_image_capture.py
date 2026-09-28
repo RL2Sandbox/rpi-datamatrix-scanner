@@ -62,4 +62,3 @@ while True:
 
 picam2.stop_preview()
 print("Done!")
-`
