@@ -1,5 +1,6 @@
 # Main application entry point
 # Main application entry point
+from barcode.scan_trial import scan_barcode
 from vision.damage_detector import detect_damage
 from session.session_manager import (
     update_barcode,
@@ -22,12 +23,17 @@ while True:
 
     if choice == "1":
 
-        barcode = input("Enter barcode: ")
+        barcode_data = scan_barcode()
 
-        update_barcode(barcode)
+        if barcode_data is None:
+            print("No Data Matrix was captured.")
+            continue
+
+        update_barcode(barcode_data)
 
         print("Barcode stored.")
-
+        print(barcode_data)
+        
     elif choice == "2":
 
         #damage_image = input("Enter damage image name: ")
