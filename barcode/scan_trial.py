@@ -226,79 +226,79 @@ def decode_scan_area(scan_area):
 
     return None, None
 
-
-# ============================================================
-# CAMERA SETUP
-# ============================================================
-
-picam2 = Picamera2()
-
-camera_configuration = picam2.create_preview_configuration(
-    main={
-        "size": (1920, 1080),
-        "format": "RGB888"
-    },
-    buffer_count=4
-)
-
-picam2.configure(camera_configuration)
-picam2.start()
-
-# Allow exposure and white balance to settle.
-time.sleep(2)
-
-
-# ============================================================
-# CAMERA MODULE 3 AUTOFOCUS
-# ============================================================
-
-if LIBCAMERA_CONTROLS_AVAILABLE:
-    try:
-        picam2.set_controls({
-            "AfMode": controls.AfModeEnum.Continuous,
-            "AfRange": controls.AfRangeEnum.Macro,
-            "AfSpeed": controls.AfSpeedEnum.Fast
-        })
-
-        print("Continuous close-range autofocus enabled.")
-
-    except Exception as error:
-        print(f"Macro autofocus could not be enabled: {error}")
-        print("Trying normal continuous autofocus.")
-
+def scan_barcode():
+    # ============================================================
+    # CAMERA SETUP
+    # ============================================================
+    
+    picam2 = Picamera2()
+    
+    camera_configuration = picam2.create_preview_configuration(
+        main={
+            "size": (1920, 1080),
+            "format": "RGB888"
+        },
+        buffer_count=4
+    )
+    
+    picam2.configure(camera_configuration)
+    picam2.start()
+    
+    # Allow exposure and white balance to settle.
+    time.sleep(2)
+    
+    
+    # ============================================================
+    # CAMERA MODULE 3 AUTOFOCUS
+    # ============================================================
+    
+    if LIBCAMERA_CONTROLS_AVAILABLE:
         try:
             picam2.set_controls({
-                "AfMode": controls.AfModeEnum.Continuous
+                "AfMode": controls.AfModeEnum.Continuous,
+                "AfRange": controls.AfRangeEnum.Macro,
+                "AfSpeed": controls.AfSpeedEnum.Fast
             })
-        except Exception as autofocus_error:
-            print(f"Autofocus warning: {autofocus_error}")
-
-else:
-    # Numeric fallback:
-    # AfMode 2 represents continuous autofocus.
-    try:
-        picam2.set_controls({
-            "AfMode": 2
-        })
-
-        print("Continuous autofocus enabled.")
-
-    except Exception as error:
-        print(f"Autofocus warning: {error}")
-
-
-print("\nData Matrix scanner started.")
-print("Place the Data Matrix inside the green rectangle.")
-print("Hold the label still until the image becomes sharp.")
-print("Press F to trigger autofocus.")
-print("Press S to save the scanning area.")
-print("Press Q to quit.\n")
-
-
-# ============================================================
-# MAIN LIVE SCANNING LOOP
-# ============================================================
-def scan_barcode():
+    
+            print("Continuous close-range autofocus enabled.")
+    
+        except Exception as error:
+            print(f"Macro autofocus could not be enabled: {error}")
+            print("Trying normal continuous autofocus.")
+    
+            try:
+                picam2.set_controls({
+                    "AfMode": controls.AfModeEnum.Continuous
+                })
+            except Exception as autofocus_error:
+                print(f"Autofocus warning: {autofocus_error}")
+    
+    else:
+        # Numeric fallback:
+        # AfMode 2 represents continuous autofocus.
+        try:
+            picam2.set_controls({
+                "AfMode": 2
+            })
+    
+            print("Continuous autofocus enabled.")
+    
+        except Exception as error:
+            print(f"Autofocus warning: {error}")
+    
+    
+    print("\nData Matrix scanner started.")
+    print("Place the Data Matrix inside the green rectangle.")
+    print("Hold the label still until the image becomes sharp.")
+    print("Press F to trigger autofocus.")
+    print("Press S to save the scanning area.")
+    print("Press Q to quit.\n")
+    
+    
+    # ============================================================
+    # MAIN LIVE SCANNING LOOP
+    # ============================================================
+    
     frame_number = 0
     last_scanned_data = None
     last_scan_time = 0
@@ -489,7 +489,9 @@ def scan_barcode():
         print("Camera closed safely.")
       
     #Added Data matrix scanner code
-#standalone testing
+# ============================================================
+# STANDALONE TESTING
+# ============================================================
 if __name__ == "__main__":
     scan_result = scan_barcode()
 
