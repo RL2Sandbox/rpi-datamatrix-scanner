@@ -22,17 +22,18 @@ while True:
     choice = input("> ")
 
     if choice == "1":
-
         barcode_data = scan_barcode()
-
+ 
         if barcode_data is None:
-            print("No Data Matrix was captured.")
-            continue
-
-        update_barcode(barcode_data)
-
-        print("Barcode stored.")
-        print(barcode_data)
+ 
+            print("No barcode captured.")
+ 
+        else:
+ 
+            update_barcode(barcode_data)
+ 
+            print("Barcode stored.")
+            print(barcode_data)
         
     elif choice == "2":
 
